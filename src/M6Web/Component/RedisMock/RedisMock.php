@@ -1176,6 +1176,16 @@ class RedisMock
     protected function returnPipedInfo($info)
     {
         if (!$this->pipeline) {
+            // support for predis 1.*
+            if (class_exists('Predis\Response\Status')) {
+                // payload must be a string
+                if (null === $info) {
+                    $info = '';
+                }
+
+                return new \Predis\Response\Status($info);
+            }
+
             return $info;
         }
 
